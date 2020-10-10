@@ -24,6 +24,7 @@ export default class extends Command {
     ) as Discord.TextChannel;
     try {
       evaled = await eval(args.join(" "));
+      //TODO Make it asynchronous
       let inspected = inspect(evaled);
       for (let i = 0; i < inspected.length; i += 1950) {
         const toSend = inspected.substring(
