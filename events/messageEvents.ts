@@ -19,9 +19,13 @@ class MessageReactionAdd extends Event {
     const message = reaction.message;
     if (reaction.message.channel.id == Constants.Ids.Chs.ServerChats.CreationChat) {
       if (discordemojis && !discordemojis.price) {
-        
-        if (message.reactions.cache.find(x => x.emoji.id == reaction.emoji.id)!.count! >= 15 && !Used.has(message.id)) {
-          Used.add(message.id)
+        const PostVerify = await this.client.db.getCollection("creatorspost")?.getOne({ messageID: message.id})!
+        if (message.reactions.cache.find(x => x.emoji.id == reaction.emoji.id)!.count! >= 15 && !PostVerify.used) {
+          PostVerify.content = message.content ? message.content : message.attachments.first() ? message.attachments.first()?.url : "";
+          PostVerify.used = true;
+          PostVerify.userId = message.member?.id;
+          PostVerify.date = new Date();
+          await PostVerify.save();
           const ch = message.guild?.channels.cache.get(Constants.Ids.Chs.ServerChats.AdminChat) as Discord.TextChannel
           ch.send(new Discord.MessageEmbed({
             title: "Проверка творчества 🖼️",

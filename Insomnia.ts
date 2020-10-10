@@ -1,4 +1,4 @@
-import { Core, PermissionLevels, Mongo, Discord } from "discore.js";
+import { Core, PermissionLevels, Mongo, Discord, Json } from "discore.js";
 import { existsSync, readFileSync } from "fs";
 import Constants, { Colors } from "./util/Constants";
 import { CronJob } from "cron";
@@ -25,7 +25,17 @@ const db = new Mongo(String(process.env.mongodb), {
   useUnifiedTopology: true,
 });
 //#region addModels to db
-EventEmitter.defaultMaxListeners = 18;
+EventEmitter.defaultMaxListeners = 19;
+db.addModel("creatorspost", {
+  messageID: Mongo.Types.String,
+  date: Mongo.Types.Date,
+  userId: Mongo.Types.String,
+  content: Mongo.Types.String,
+  used: {
+    type: Mongo.Types.Boolean,
+    default: false,
+  },
+})
 db.addModel("configs", {
   guildId: Mongo.Types.String,
   xpOnline: {
