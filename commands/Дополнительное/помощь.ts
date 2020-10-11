@@ -4,6 +4,7 @@ import { capitalizeFirstLetter } from "../../util/helpers";
 import { removeExtraSpaces } from "../../util/functions";
 
 const PermissionLevels = {
+  1: "Участник",
   2: "Демон снов",
   3: "Новолуние",
   4: "Нитро бустер",
@@ -60,7 +61,7 @@ export default class extends Command {
           (c) => c.name.toLowerCase() == searchString.toLowerCase() ||
             c.aliases.includes(searchString.toLowerCase())
         )!;
-        if (c.permLevel != 2 && c.permLevel != 3 && c.permLevel != 4 && c.permLevel != 5 && c.permLevel != 6 && c.permLevel != 7 && c.permLevel != 8 && c.permLevel != 9 && c.permLevel != 10) return;
+        if (c.permLevel != 2 && c.permLevel != 2 && c.permLevel != 3 && c.permLevel != 4 && c.permLevel != 5 && c.permLevel != 6 && c.permLevel != 7 && c.permLevel != 8 && c.permLevel != 9 && c.permLevel != 10) return;
         embed.addField(
           c.name,
           `Помощь:\`${c.custom.help}\`\nСинтаксис:${c.custom.syntax}\nПример:\`${
