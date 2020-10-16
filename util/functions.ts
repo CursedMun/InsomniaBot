@@ -91,20 +91,20 @@ export async function createChannel(
         return;
       if (member.roles.cache.has(Constants.Ids.Roles.Users.Sponsor)) {
         try {
+          const userconf = await core.db
+            .getCollection("voiceconfigs")
+            ?.findOne({ id: member.id, type: 2 });
           await member.guild.channels
-            .create("🌟Сон", {
+            .create(userconf?.voiceName ? userconf.voiceName : "🌟Сон", {
               type: "voice",
-              userLimit: 2,
+              userLimit: userconf?.voiceLimit ? userconf?.voiceLimit : 2,
               parent: clanRoom.parentID,
               permissionOverwrites: [
                 {
                   id: member.id,
                   allow: [
-                    "MANAGE_CHANNELS",
-                    "MANAGE_ROLES",
+                    "PRIORITY_SPEAKER",
                     "VIEW_CHANNEL",
-                    "SPEAK",
-                    "MUTE_MEMBERS",
                   ],
                 }
               ],

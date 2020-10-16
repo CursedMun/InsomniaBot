@@ -56,9 +56,8 @@ export async function customreactions(
           ).catch(console.error);
 
         const target = mentions.members?.first() || guild?.members.cache.get(args[1]);
-
         try {
-          if (text.slice("%target%")) {
+          if (text.search("%target%") != -1) {
             if (!target) return;
             if (target.id === member?.id) return;
 
@@ -81,7 +80,7 @@ export async function customreactions(
             if (image && !image.url) embed.image = { url: image };
             return channel.send({ embed }).catch(console.error);
           } else {
-            if (target) return;
+            //if (target) return;
 
             withdrawTransaction(member!, cm.price, core, Constants.TransactionsTypes[11]);
 

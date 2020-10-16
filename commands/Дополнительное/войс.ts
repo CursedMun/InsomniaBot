@@ -1,6 +1,6 @@
 import { Command, Discord } from "discore.js";
 import Constants from "../../util/Constants";
-import { convertUnixToTime, removeExtraSpaces } from "../../util/functions";
+import { convertUnixToTime, isPrivate, removeExtraSpaces } from "../../util/functions";
 import { unixTime } from "../../util/helpers";
 const UserTimeout = new Map<String, number>()
 export default class extends Command {
@@ -57,7 +57,7 @@ export default class extends Command {
             (member?.roles.cache.has(Constants.Ids.Roles.Users.ServerBooster))
         ) {
             let voiceconfig = this.client.db.getCollection("voiceconfigs");
-            let smth = await voiceconfig?.getOne({ id: member.id, type: 0 });
+            let smth = await voiceconfig?.getOne({ id: member.id, type: isPrivate(my_channel) ? 0 : 2 });
             smth!.voiceName = name;
             await smth!.save().catch((e) => console.log(e));
         }

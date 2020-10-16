@@ -44,6 +44,7 @@ export default class extends Command {
   }
   get customOptions() {
     return {
+      global: true,
       group: "Основное",
       help: "Проверить статус музыкальных ботов (занят/доступен)",
       syntax: `${this.client.prefix}муз`,
@@ -51,8 +52,9 @@ export default class extends Command {
     };
   }
 
-  async run(message: Discord.Message, args: string[]) {
+  run(message: Discord.Message, args: string[]) {
     const { guild, channel } = message;
+    if (message.channel.id != Constants.Ids.Chs.ServerChats.FloodMusic && message.channel.id != Constants.Ids.Chs.ServerChats.FloodChat ) return
     try {
       let bots = ["234395307759108106", "282859044593598464", "284035252408680448", "184405311681986560", "235088799074484224", "252128902418268161"];
       let i = 0;
