@@ -61,7 +61,6 @@ export default class extends Command {
           (c) => c.name.toLowerCase() == searchString.toLowerCase() ||
             c.aliases.includes(searchString.toLowerCase())
         )!;
-        if (c.permLevel != 2 && c.permLevel != 2 && c.permLevel != 3 && c.permLevel != 4 && c.permLevel != 5 && c.permLevel != 6 && c.permLevel != 7 && c.permLevel != 8 && c.permLevel != 9 && c.permLevel != 10) return;
         embed.addField(
           c.name,
           `Помощь:\`${c.custom.help}\`\nСинтаксис:${c.custom.syntax}\nПример:\`${
@@ -98,7 +97,6 @@ export default class extends Command {
       }
 
     } else {
-      if (PermissionLevel != 2 && PermissionLevel != 3 && PermissionLevel != 4 && PermissionLevel != 5 && PermissionLevel != 6 && PermissionLevel != 7 && PermissionLevel != 8 && PermissionLevel != 9 && PermissionLevel != 10) return;
       embed.setTitle(
         `Команды сервера || ${
         PermissionLevels[PermissionLevel]

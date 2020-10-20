@@ -204,7 +204,7 @@ export async function LoveTaxs(guild: Discord.Guild, Core: Core) {
         });
       }
     } catch (e) {
-      console.error(e);
+      console.error(`Error in love taxs:\nDoc: ${q}\n Err: ${e}`);
     }
   });
 }

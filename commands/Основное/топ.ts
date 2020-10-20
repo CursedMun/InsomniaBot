@@ -16,6 +16,7 @@ export default class extends Command {
     const { guild, channel, member, mentions } = message;
     const Configs = this.client.db.getCollection("configs");
     const Users = this.client.db.getCollection("users");
+    if (!["смс", "сообщений", "уровней", "войс-онлайна", "контейнеров", "$", "богачей","печенек"].includes(args[0]) && args[0]) return;
     const loadingEmbed = new Discord.MessageEmbed({
       color: member?.displayColor,
       description: "Загрузка Топа..",

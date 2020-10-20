@@ -56,7 +56,7 @@ export default class extends Command {
             (member?.roles.cache.has(Constants.Ids.Roles.Users.Sponsor)) ||
             (member?.roles.cache.has(Constants.Ids.Roles.Users.ServerBooster))
         ) {
-            let voiceconfig = this.client.db.getCollection("voiceconfigs");
+            const voiceconfig = this.client.db.getCollection("voiceconfigs");
             let smth = await voiceconfig?.getOne({ id: member.id, type: isPrivate(my_channel) ? 0 : 2 });
             smth!.voiceName = name;
             await smth!.save().catch((e) => console.log(e));

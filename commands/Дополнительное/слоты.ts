@@ -57,7 +57,7 @@ export default class extends Command {
         ) {
             const voiceconfig = this.client.db.getCollection("voiceconfigs");
             let smth = await voiceconfig?.getOne({ id: member.id, type: isPrivate(my_channel) ? 0 : 2 });
-            smth!.voiceLimit = member.voice.channel?.userLimit;
+            smth!.voiceLimit = number;
             await smth!.save().catch((e) => console.log(e));
         }
         const time = unixTime() + 600
