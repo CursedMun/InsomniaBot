@@ -72,8 +72,8 @@ export default class extends Command {
           await scndperson!.save().catch(console.error);
 
           newMsg.delete();
-          await scndusr.roles.remove(Constants.Ids.Roles.Users.LoveRole)
-          await message.member!.roles.remove(Constants.Ids.Roles.Users.LoveRole)
+          await scndusr.roles.remove(Constants.Ids.Roles.Users.LoveRole).catch(console.error)
+          await message.member!.roles.remove(Constants.Ids.Roles.Users.LoveRole).catch(console.error)
           scndusr.send(
             new Discord.MessageEmbed()
               .setColor("#ce2626")

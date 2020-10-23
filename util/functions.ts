@@ -103,6 +103,8 @@ export async function createChannel(
                 {
                   id: member.id,
                   allow: [
+                    "MANAGE_CHANNELS",
+                    "MANAGE_ROLES",
                     "PRIORITY_SPEAKER",
                     "VIEW_CHANNEL",
                   ],
