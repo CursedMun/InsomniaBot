@@ -84,20 +84,8 @@ export default class extends Command {
                   react.emoji.id === "633712357129977876") &&
                 user.id === target.id;
               const collector = m.createReactionCollector(filter, {
-                time: 10000,
+                time: 60000,
               });
-              m.delete({ timeout: 10000 })
-                .then((f) => {
-                  awardTransaction(member!, amount, this.client);
-                  awardTransaction(target!, amount, this.client);
-                  const nope = new Discord.MessageEmbed()
-                    .setColor(member!.displayColor)
-                    .setDescription(
-                      `${member}, ваш вызов на поединок был проигнорирован`
-                    );
-                  channel.send(nope);
-                })
-                .catch((O_o) => { });
               collector.on("collect", async (reaction) => {
                 if (reaction.emoji.id === "633712359772389386") {
                   m.delete();
@@ -173,6 +161,17 @@ export default class extends Command {
                   channel.send(exit);
                 }
               });
+              collector.on('end', reaction => {
+                m.delete()
+                awardTransaction(member!, amount, this.client);
+                awardTransaction(target!, amount, this.client);
+                const nope = new Discord.MessageEmbed()
+                  .setColor(member!.displayColor)
+                  .setDescription(
+                    `${member}, ваш вызов на поединок был проигнорирован`
+                  );
+                channel.send(nope);
+              })
             });
           }
         });

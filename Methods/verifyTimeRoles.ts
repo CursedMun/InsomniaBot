@@ -82,17 +82,7 @@ export async function verifyTimeRoles(guild: Discord.Guild, core: Core) {
                   react.emoji.id == "633712357129977876") &&
                 user.id == member!.id;
               const collector = m.createReactionCollector(filter, {
-                time: 60000 * 180,
-              });
-
-              m.delete({ timeout: 60000 * 180 }).then(async (message) => {
-                if (!message) return;
-                const embed2 = new Discord.MessageEmbed()
-                  .setColor(roleattime!.color)
-                  .setDescription(`Роль удалена`);
-                await unix.deleteOne({ _id: q._id });
-                await roleattime.delete();
-                return member!.send(embed2);
+                time: 3600000,
               });
 
               collector.on("collect", async (reaction) => {
@@ -123,7 +113,7 @@ export async function verifyTimeRoles(guild: Discord.Guild, core: Core) {
                         reaction.message.delete()
                         await roleattime.delete();
                         return member.send(new Discord.MessageEmbed().setDescription(`У вас недостаточно звёзд`)
-                        ).catch(err => console.error(`Не смог отправить смс в лс ${member.user.tag}`));;
+                        ).catch(err => console.error(`Не смог отправить смс в лс ${member.user.tag}`));
                       } else {
                         q.time = unixTime() + 86400 * q.days;
                         const embed = new Discord.MessageEmbed()
@@ -131,7 +121,7 @@ export async function verifyTimeRoles(guild: Discord.Guild, core: Core) {
                           .setDescription(`Успех`);
                         reaction.message.delete()
                         await q.save().catch(console.error);
-                        return member!.send(embed);
+                        return member!.send(embed).catch(err => console.error(`Не смог отправить смс в лс ${member.user.tag}`));;
                       }
                     })
                   }
@@ -145,6 +135,15 @@ export async function verifyTimeRoles(guild: Discord.Guild, core: Core) {
                   return await roleattime.delete();
                 }
               });
+              collector.on("end", async (reaction) => {
+                if (!m) return
+                const embed2 = new Discord.MessageEmbed()
+                  .setColor(roleattime!.color)
+                  .setDescription(`Роль удалена`);
+                await unix.deleteOne({ _id: q._id });
+                await roleattime.delete();
+                return member!.send(embed2);
+              })
             });
           } else if (q.Type == 2) {
             member.roles.remove(roleattime);

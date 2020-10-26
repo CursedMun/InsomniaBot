@@ -5,6 +5,7 @@ import * as functions from "../util/functions";
 import { updateMessage } from "../Methods/updateMessage";
 import { customreactions } from "../Methods/customReactions";
 import { withdrawTransaction, awardPack, awardTransaction } from "../Methods/allRelatedToCurrency";
+import { wholeNumber } from "../util/functions";
 const Used = new Set()
 class MessageReactionAdd extends Event {
   get options() {
@@ -149,8 +150,9 @@ class MessageReactionAdd extends Event {
 
         } else return
       } else if (discordemojis && discordemojis.price && !Used.has(member.id) && member.id != message.author.id) {
-        withdrawTransaction(member, discordemojis.price, this.client, Constants.TransactionsTypes[10])
-        awardTransaction(reaction.message.member!, discordemojis.price, this.client, Constants.TransactionsTypes[10])
+        const amount = wholeNumber(Number(discordemojis.price));
+        withdrawTransaction(member, amount, this.client, Constants.TransactionsTypes[10])
+        awardTransaction(reaction.message.member!, amount, this.client, Constants.TransactionsTypes[10])
       }
   }
 }

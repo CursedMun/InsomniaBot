@@ -144,7 +144,6 @@ export default class extends Command {
                   const collector = m.createReactionCollector(filter, {
                     time: 3600000,
                   });
-                  m.delete({ timeout: 3600000 }).then(() => { });
                   collector.on("collect", async (reaction) => {
                     if (
                       (reaction.emoji.id || reaction.emoji.name) ==
@@ -300,6 +299,9 @@ export default class extends Command {
                       } else return;
                     }
                   });
+                  collector.on("end", reaction => {
+                    m.delete();
+                  })
                 });
             } else {
               const time = convertUnixToTime(req.time)
@@ -346,9 +348,6 @@ export default class extends Command {
 
                 const filter = (react: Discord.MessageReaction, user: Discord.GuildMember) => (react.emoji.id == '633712359772389386' || react.emoji.id == '633712357129977876') && user.id == owner!.id
                 const collector = m.createReactionCollector(filter, { time: 3600000 })
-                m.delete({ timeout: 3600000 }).then(async () => {
-                  await requests.deleteOne((r: Document) => r.userId == member!.id && r.ClubId != null)
-                })
                 collector.on('collect', async reaction => {
 
                   if ((reaction.emoji.id || reaction.emoji.name) == '633712359772389386') {
@@ -484,6 +483,10 @@ export default class extends Command {
                       } else return;
                     } else return;
                   } else return;
+                })
+                collector.on('end', async reaction => {
+                  m.delete();
+                  await requests.deleteOne((r: Document) => r.userId == member!.id && r.ClubId != null)
                 })
               })
           }

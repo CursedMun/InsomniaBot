@@ -66,13 +66,6 @@ export default class extends Command {
           time: 60000,
         });
 
-        m.delete({ timeout: 60000 }).then(() => {
-          const embed2 = new Discord.MessageEmbed()
-            .setColor(role!.color)
-            .setDescription(`Вы не подтвердили своё действие😌`);
-          return member!.send(embed2);
-        });
-
         collector.on("collect", async (reaction) => {
           if (reaction.emoji.id == "633712359772389386") {
             m.delete();
@@ -98,6 +91,13 @@ export default class extends Command {
             m.delete();
           }
         });
+        collector.on("end", reaction => {
+          m.delete();
+          const embed2 = new Discord.MessageEmbed()
+            .setColor(role!.color)
+            .setDescription(`Вы не подтвердили своё действие😌`);
+          return member!.send(embed2);
+        })
       });
 
     } return

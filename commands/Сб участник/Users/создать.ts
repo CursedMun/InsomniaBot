@@ -139,6 +139,9 @@ export default class extends Command {
                   text.createOverwrite(member!.id, {
                     MANAGE_MESSAGES: true,
                   });
+                  text.createOverwrite(Constants.Ids.Roles.MiscRoles.muted, {
+                    SEND_MESSAGES: false,
+                  });
                   const room = guild!.channels.cache.get(
                     Constants.Ids.Chs.Clan.channel
                   );
@@ -159,7 +162,6 @@ export default class extends Command {
                   );
                   return text.createOverwrite(role, {
                     VIEW_CHANNEL: true,
-                    SEND_MESSAGES: true,
                   });
                 });
               const unixestime = unixTime() + 2505600;

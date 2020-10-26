@@ -50,14 +50,6 @@ db.addModel("configs", {
     type: Mongo.Types.String,
     default: "!",
   },
-  bigLimit: {
-    type: Mongo.Types.Number,
-    default: 4,
-  },
-  smallLimit: {
-    type: Mongo.Types.Number,
-    default: 10,
-  },
   CurrencyLogo: {
     type: Mongo.Types.String,
     default: "<a:Star:632914440047820828>",
@@ -73,26 +65,6 @@ db.addModel("configs", {
   ItemsOnPage: {
     type: Mongo.Types.Number,
     default: 5,
-  },
-  onlineCounter: {
-    type: Mongo.Types.String,
-    default: "null",
-  },
-  memberCounter: {
-    type: Mongo.Types.String,
-    default: "null",
-  },
-  packOpen: {
-    type: Mongo.Types.Number,
-    default: 15,
-  },
-  OnlineToClan: {
-    type: Mongo.Types.Number,
-    default: 0,
-  },
-  DailyMessage: {
-    type: Mongo.Types.Number,
-    default: 0,
   },
   Messages: {
     type: Mongo.Types.Number,
@@ -154,10 +126,6 @@ db.addModel("users", {
     default: 0,
   },
   msgCount: {
-    type: Mongo.Types.Number,
-    default: 0,
-  },
-  ticket: {
     type: Mongo.Types.Number,
     default: 0,
   },
@@ -233,10 +201,6 @@ db.addModel("clans", {
     default: null,
   },
   clanChat: {
-    type: Mongo.Types.String,
-    default: null,
-  },
-  clanVoice: {
     type: Mongo.Types.String,
     default: null,
   },
@@ -356,54 +320,54 @@ const permLevels = new PermissionLevels()
   .add(
     Constants.PermLevels.Dev,
     false,
-    (msg: { member: { roles: { cache: { has: (arg0: any) => any } } } }) =>
+    (msg: Discord.Message) =>
       msg.member && msg.member.roles.cache.has(staffRoles.dev)
   )
   .add(
     Constants.PermLevels.Administrator,
     false,
-    (msg: { member: { roles: { cache: { has: (arg0: any) => any } } } }) =>
+    (msg: Discord.Message) =>
       msg.member && msg.member.roles.cache.has(staffRoles.administrator)
   )
   .add(
     Constants.PermLevels.Moderator,
     false,
-    (msg: { member: { roles: { cache: { has: (arg0: any) => any } } } }) =>
+    (msg: Discord.Message) =>
       msg.member && msg.member.roles.cache.has(staffRoles.moderator)
   )
   .add(
     Constants.PermLevels.Curator,
     false,
-    (msg: { member: { roles: { cache: { has: (arg0: any) => any } } } }) =>
+    (msg: Discord.Message) =>
       msg.member && msg.member.roles.cache.has(staffRoles.curator)
   )
   .add(
     Constants.PermLevels.EventCreator,
     false,
-    (msg: { member: { roles: { cache: { has: (arg0: any) => any } } } }) =>
+    (msg: Discord.Message) =>
       msg.member && msg.member.roles.cache.has(staffRoles.eventCreator)
   )
   .add(
     Constants.PermLevels.NitroBooster,
     false,
-    (msg: { member: { roles: { cache: { has: (arg0: any) => any } } } }) =>
+    (msg: Discord.Message) =>
       msg.member && msg.member.roles.cache.has(serverRoles.ServerBooster)
   )
   .add(
     Constants.PermLevels.Donater,
     false,
-    (msg: { member: { roles: { cache: { has: (arg0: any) => any } } } }) =>
+    (msg: Discord.Message) =>
       msg.member && msg.member.roles.cache.has(serverRoles.Sponsor)
   )
   .add(
     Constants.PermLevels.Demon,
     false,
-    (msg: { member: { roles: { cache: { has: (arg0: any) => any } } } }) =>
+    (msg: Discord.Message) =>
       msg.member && msg.member.roles.cache.has(serverRoles.Demon)
   ).add(
     Constants.PermLevels.Novolunie,
     false,
-    (msg: { member: { roles: { cache: { has: (arg0: any) => any } } } }) =>
+    (msg: Discord.Message) =>
       msg.member && msg.member.roles.cache.has(serverRoles.Novolunie)
   );;
 const core = new Core({
