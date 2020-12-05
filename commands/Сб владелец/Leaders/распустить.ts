@@ -9,7 +9,7 @@ export default class extends Command {
   }
   get customOptions() {
     return {
-      group: "Сообщество для владельцев",
+      group: "clans",
       help: "Распустить сообщество",
       syntax: `${this.client.prefix}сб распустить`,
       example: `${this.client.prefix}сб распустить`,
@@ -20,7 +20,6 @@ export default class extends Command {
     const { member, channel, guild } = message;
     const Users = this.client.db.getCollection("users")!;
     const clans = this.client.db.getCollection("clans")!;
-    const taxs = this.client.db.getCollection("clantaxs")!;
     const data = {
       userId: member!.id,
     };
@@ -77,7 +76,6 @@ export default class extends Command {
               m.isClubOwner = 0;
               await m.save().catch()
             })
-            await taxs.deleteOne({ ClubId: clan!.ClubId });
             await clans.deleteOne({ ClubId: clan!.ClubId });
 
             role!.delete();
@@ -92,11 +90,13 @@ export default class extends Command {
           }
         });
         collector.on("end", reaction => {
-          m.delete();
-          const embed2 = new Discord.MessageEmbed()
-            .setColor(role!.color)
-            .setDescription(`Вы не подтвердили своё действие😌`);
-          return member!.send(embed2);
+          if (!m.deleted) {
+            m.delete();
+            const embed2 = new Discord.MessageEmbed()
+              .setColor(role!.color)
+              .setDescription(`Вы не подтвердили своё действие😌`);
+            return member!.send(embed2);
+          };
         })
       });
 

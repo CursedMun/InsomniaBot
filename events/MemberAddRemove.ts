@@ -10,7 +10,6 @@ class MemberRemove extends Event {
   async run(member: Discord.GuildMember) {
     const Users = this.client.db.getCollection("users")!;
     const clans = this.client.db.getCollection("clans")!;
-    const clantaxs = this.client.db.getCollection("clantaxs")!;
     const LoveTaxs = this.client.db.getCollection("LoveTaxs")!;
     const Unixes = this.client.db.getCollection("unixes")!;
     const UserClubDeposits = this.client.db.getCollection("userclubdeposits")!;
@@ -27,7 +26,6 @@ class MemberRemove extends Event {
       members.forEach(async (m: Document) => {
         await Users.updateOne({ userId: m.userId }, { ClubId: null });
       });
-      await clantaxs.deleteOne({ ClubId: clan!.ClubId })
       await clans.deleteOne({ ClubId: clan!.ClubId });
       guild.roles.cache.get(clan!.clanRole)!.delete().catch();
     }

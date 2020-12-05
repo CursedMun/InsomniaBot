@@ -26,7 +26,6 @@ export default class extends Command {
     const Users = this.client.db.getCollection("users")!;
     const Configs = this.client.db.getCollection("configs")!;
     const clans = this.client.db.getCollection("clans")!;
-    const taxs = this.client.db.getCollection("clantaxs")!;
     const config = await Configs.getOne({ guildId: message.guild?.id });
     const dataUser = {
       userId: member!.id,
@@ -56,6 +55,7 @@ export default class extends Command {
       if (!HexColor) return;
 
       const ClubId = randomInt(100000000, 999999999);
+      const Clan = await clans.getOne({ ClubId })!;
       const price = 1500;
 
       const catRole = guild!.roles.cache.get(
@@ -104,15 +104,11 @@ export default class extends Command {
                 const data = {
                   userId: member!.id,
                 };
-                await clans.insertOne({
-                  name: name,
-                  owner: member!.id,
-                  clanRole: role.id,
-                  DateCreated: DateCreated,
-                  ClubId: ClubId,
-                })
-                  .save()
-                  .catch((e) => console.log(e));
+                Clan.name = name;
+                Clan.owner = member!.id;
+                Clan.clanRole = role.id;
+                Clan.DateCreated = DateCreated;
+                Clan.ClubId = ClubId;
                 user.ClubId = ClubId;
                 user.isClubOwner = 1;
                 return await user.save().catch(console.error)
@@ -126,13 +122,7 @@ export default class extends Command {
                   parent: Constants.Ids.Chs.Clan.parentID,
                 })
                 .then(async (text) => {
-                  await clans.updateOne(
-                    { ClubId: ClubId },
-                    {
-                      clanChat: text.id,
-                    }
-                  );
-                  text.setNSFW(true);
+                  Clan.clanChat = text.id
                   text.createOverwrite(guild!.id, {
                     VIEW_CHANNEL: false,
                   });
@@ -160,20 +150,12 @@ export default class extends Command {
                         "\n\n***Владелец сообщества может модерировать этот чат. ***"
                       )
                   );
+                  await Clan.save().catch(console.error)
                   return text.createOverwrite(role, {
                     VIEW_CHANNEL: true,
                   });
                 });
-              const unixestime = unixTime() + 2505600;
-
-              return await taxs
-                .insertOne({
-                  ClubId: ClubId,
-                  time: unixestime,
-                  stage: 0,
-                })
-                .save()
-                .catch((e) => console.log(e));
+              return;
             });
         }
       });

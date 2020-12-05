@@ -5,23 +5,24 @@ import { withdrawTaxs, withdrawLoveTaxs } from "./allRelatedToCurrency";
 
 export async function clantaxs(guild: Discord.Guild, Core: Core) {
   const Users = Core.db.getCollection("users")!;
-  const unix = Core.db.getCollection("clantaxs")!;
   const clans = Core.db.getCollection("clans")!;
   const Config = await Core.db
     .getCollection("configs")
     ?.getOne({ guildId: Constants.Ids.guilds[0] });
-  const u = await unix.fetch();
-  if (!u.size) return;
-  u.forEach(async (q) => {
+  const q = await clans.fetch();
+  if (!q.size) return;
+  q.forEach(async (q) => {
     const ClubId = q.ClubId;
     const data = {
       ClubId: ClubId,
     };
-
+    
+    const time = q.taxs.time;
+    const stage = q.taxs.stage;
     const times = helper.unixTime();
-    const timeout = q.time > 0 && times >= q.time && q.stage == 0;
-    const timeout1 = q.time > 0 && times >= q.time && q.stage == 1;
-    const timeout2 = q.time > 0 && times >= q.time && q.stage == 2;
+    const timeout = time > 0 && times >= time && stage == 0;
+    const timeout1 = time > 0 && times >= time && stage == 1;
+    const timeout2 = time > 0 && times >= time && stage == 2;
 
     const tax = 2500;
 
@@ -30,12 +31,13 @@ export async function clantaxs(guild: Discord.Guild, Core: Core) {
     const channel = guild.channels.cache.get(
       clan!.clanChat
     ) as Discord.TextChannel;
-    const voice = guild.channels.cache.get(Constants.Ids.Chs.Clan.channel);
-
     if (timeout) {
       const unixestime = times + 86400 * 6;
-      q.stage = 1;
-      q.time = unixestime;
+      q.taxs.inventory = {
+        ...q.taxs.inventory,
+        time: unixestime,
+        stage: 1
+      }
       await q.save().catch(console.error);
 
       const embed = new Discord.MessageEmbed()
@@ -51,8 +53,11 @@ export async function clantaxs(guild: Discord.Guild, Core: Core) {
       return channel.send(embed);
     } else if (timeout1) {
       const unixestime = times + 86400 * 1;
-      q.stage = 2;
-      q.time = unixestime;
+      q.taxs.inventory = {
+        ...q.taxs.inventory,
+        time: unixestime,
+        stage: 2
+      }
       await q.save().catch(console.error);
 
       const embed = new Discord.MessageEmbed()
@@ -88,12 +93,14 @@ export async function clantaxs(guild: Discord.Guild, Core: Core) {
             await m.save().catch(console.error);
           });
           await clans.deleteOne(data)?.catch(console.error);
-          await unix.deleteOne({ ClubId, stage: 2 });
 
         } else {
           const unixestime = times + 2505600 * 1;
-          q.stage = 0;
-          q.time = unixestime;
+          q.taxs.inventory = {
+            ...q.taxs.inventory,
+            time: unixestime,
+            stage: 0
+          }
           await q.save().catch(console.error);
           const embed2 = new Discord.MessageEmbed()
             .setColor(role!.color)

@@ -18,11 +18,9 @@ export default class extends Command {
 
   async run(message: Discord.Message, args: string[]) {
     const { member, channel, content, guild, mentions } = message;
-    const selected = args[0];
     const Users = this.client.db.getCollection("users")!;
     const Configs = this.client.db.getCollection("configs")!;
     const clans = this.client.db.getCollection("clans")!;
-    const taxs = this.client.db.getCollection("clantaxs")!;
     const config = await Configs.getOne({ guildId: message.guild?.id });
 
     const target =

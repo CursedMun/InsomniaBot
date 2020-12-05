@@ -40,7 +40,7 @@ export default class extends Command {
       clanRole: role.id,
     };
 
-    let user = await Users.findOne(data)!;
+    let user = await Users.getOne(data)!;
 
     let clan = await clans.findOne(dataClan);
     if (!clan) {
@@ -149,6 +149,7 @@ export default class extends Command {
                       (reaction.emoji.id || reaction.emoji.name) ==
                       "633712359772389386"
                     ) {
+                      m.delete();
                       const target = member;
                       const dataClan = {
                         owner: owner!.id,
@@ -238,6 +239,7 @@ export default class extends Command {
                       (reaction.emoji.id || reaction.emoji.name) ==
                       "633712357129977876"
                     ) {
+                      m.delete();
                       const target = member;
                       if (!target) return;
 
@@ -254,7 +256,6 @@ export default class extends Command {
                         userId: target.id,
                         ClubId: user!.ClubId,
                       };
-                      console.log(user)
                       if (user!.isClubOwner && user!.ClubId !== null) {
                         let req = await requests.findOne(dataUnix);
                         if (req!.ClubId == user!.ClubId) {
@@ -300,6 +301,7 @@ export default class extends Command {
                     }
                   });
                   collector.on("end", reaction => {
+                    if (!m) return;
                     m.delete();
                   })
                 });
@@ -351,6 +353,7 @@ export default class extends Command {
                 collector.on('collect', async reaction => {
 
                   if ((reaction.emoji.id || reaction.emoji.name) == '633712359772389386') {
+                    m.delete();
                     const target = member;
                     const data = {
                       userId: owner!.id
@@ -424,6 +427,7 @@ export default class extends Command {
                     (reaction.emoji.id || reaction.emoji.name) ==
                     "633712357129977876"
                   ) {
+                    m.delete();
                     const target = member;
                     if (!target) return;
 
@@ -485,6 +489,7 @@ export default class extends Command {
                   } else return;
                 })
                 collector.on('end', async reaction => {
+                  if (!m) return;
                   m.delete();
                   await requests.deleteOne((r: Document) => r.userId == member!.id && r.ClubId != null)
                 })

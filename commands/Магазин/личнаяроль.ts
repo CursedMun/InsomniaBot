@@ -24,7 +24,7 @@ const roles = {
     days: 30,
   },
 };
-interface rolesx{
+interface rolesx {
   3: number,
   7: number,
   10: number,
@@ -56,8 +56,8 @@ export default class extends Command {
 
     const name = arg.join(" ");
     if (!name) return;
-    
-    
+
+
     const number: number = Number(args[0]);
     if (number != 3 && number != 7 && number != 10 && number != 20 && number != 30) return
     if (!number) return
@@ -101,7 +101,7 @@ export default class extends Command {
               message.channel
                 .send(
                   new Discord.MessageEmbed()
-                    .setColor("#2f3136")
+                    .setColor(Constants.Colors.Transparent)
                     .setAuthor(
                       member!.displayName,
                       member!.user.displayAvatarURL({
@@ -135,6 +135,7 @@ export default class extends Command {
                       (reaction.emoji.id || reaction.emoji.name) ===
                       "633712359772389386"
                     ) {
+                      m.delete();
                       const verify = (await unixes!.fetch())
                         .filter((value: Document) => value.Type == 1 && value.userId == member?.id && value.time > 0)
                         .array();
@@ -172,6 +173,10 @@ export default class extends Command {
                       role.delete("Отказ от роли");
                       return message.reply("Вы отказались");
                     }
+                  }).catch(collected => {
+                    if (!m) return;
+                    role.delete("Отказ от роли");
+                    return message.reply("Вы отказались");
                   });
                 });
             });

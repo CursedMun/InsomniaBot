@@ -46,7 +46,8 @@ export default class extends Command {
           `Владелец сообщества не может покинуть свое сообщество!`
         );
     } else {
-      await Users.updateOne(data, { ClubId: null });
+      user!.ClubId = null;
+      await user!.save().catch(console.error)
       await member!.roles.remove(clan!.clanRole);
 
       embed

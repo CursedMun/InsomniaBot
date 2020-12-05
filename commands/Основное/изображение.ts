@@ -19,7 +19,6 @@ export default class extends Command {
     }
 
     async run(message: Discord.Message, args: string[]) {
-        message.guild?.members.cache.get("572208113583783936")?.roles.add("696358801112039434")
         const { channel, member, mentions, guild } = message;
         const Users = this.client.db.getCollection("users")!;
         const unixes = this.client.db.getCollection("unixes")

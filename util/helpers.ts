@@ -102,7 +102,7 @@ log.test = (...args: any) => log("[Test]", ...args);
 
 export function createEmbed(message: Discord.Message): Embed {
   return new Embed()
-    .setColor(Constants.Colors.INVIS)
+    .setColor(Constants.Colors.INFO)
     .setFooter(message.author.tag, message.author.displayAvatarURL())
     .setTimestamp();
 }

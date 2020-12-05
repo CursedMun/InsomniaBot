@@ -32,7 +32,7 @@ export default class extends Command {
         return channel
           .send(
             new Discord.MessageEmbed()
-              .setColor("#2f3136")
+              .setColor(Constants.Colors.Transparent)
               .setTitle(`Полегче!`)
               .setDescription(
                 `Прежде чем делать такие большие ставки, **заработай на них**!`
@@ -62,7 +62,7 @@ export default class extends Command {
           awardTransaction(member!, wholeNumber(number), this.client);
 
           let embed = new Discord.MessageEmbed()
-            .setColor("#2f3136")
+            .setColor(Constants.Colors.Transparent)
             .setAuthor(
               member!.displayName,
               member!.user.displayAvatarURL({ dynamic: true, size: 2048 })
@@ -91,7 +91,7 @@ export default class extends Command {
           awardTransaction(member!, wholeNumber(number), this.client);
 
           let embed = new Discord.MessageEmbed()
-            .setColor("#2f3136")
+            .setColor(Constants.Colors.Transparent)
             .setAuthor(
               member!.displayName,
               member!.user.displayAvatarURL({

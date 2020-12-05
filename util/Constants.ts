@@ -100,7 +100,7 @@ namespace Constants {
     BOX: "FFBB9D",
     DANGER: "FF0000",
     WARNING: "FFB200",
-    INVIS: "CE2626",
+    Transparent: "#2f3136",
     shops: "7BDCB5",
   };
 
@@ -128,6 +128,10 @@ namespace Constants {
     4: "Смена картинки"
   }
   export const Bets = {
+    Emojis: {
+      Head: "640827413865037844",
+      Tail: "640827413659385878"
+    },
     BetFlipGuess: {
       H: 1,
       Head: 1,
@@ -138,6 +142,8 @@ namespace Constants {
     },
     BetFlip: {
       multiplier: 1,
+      minBet: 10,
+      maxBet: 200,
       images: {
         head: "https://i.imgur.com/xYS20bz.png",
         tail: "https://i.imgur.com/a9PEBMX.png",

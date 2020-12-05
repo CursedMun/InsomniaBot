@@ -5,7 +5,10 @@ import {
   awardTransaction,
 } from "../../Methods/allRelatedToCurrency";
 import { randomInt, wholeNumber } from "../../util/functions";
-
+const usersBets: [{ id: string, timesWon: number }] = [{
+  id: "",
+  timesWon: 0,
+}]
 export default class extends Command {
   get options() {
     return {};
@@ -27,22 +30,38 @@ export default class extends Command {
     const currency = config.CurrencyLogo;
     const betflip = Bets.BetFlip;
     let imageToSend = "";
+    if (!member) return;
     const amount = wholeNumber(Number(args[0]));
-    if (!Number.isInteger(amount) || amount < 10 || amount > 10000 || !amount) return;
-    const rate = wholeNumber(amount * 1.5);
+    if (!Number.isInteger(amount) || amount < Constants.Bets.BetFlip.minBet || amount > Constants.Bets.BetFlip.maxBet || !amount) {
+      channel
+        .send(
+          new Discord.MessageEmbed({
+            title: "Полегче!",
+            color: Constants.Colors.Transparent,
+            description: `Минимальная ставка – ${Constants.Bets.BetFlip.minBet.toLocaleString(
+              'ru-RU'
+            )}\nМаксимальная ставка – ${Constants.Bets.BetFlip.maxBet.toLocaleString(
+              'ru-RU'
+            )}`,
+          })
+        )
+        .then((m) => m.delete({ timeout: 1e5 }));
+      return;
+    }
+    const rate = wholeNumber(amount * 1);
     withdrawTransaction(member!, rate, this.client, Constants.TransactionsTypes[9]).then(async (result) => {
       if (typeof result === "boolean" && !result) {
         return channel
           .send(
             new Discord.MessageEmbed()
-              .setColor("#2f3136")
+              .setColor(Constants.Colors.Transparent)
               .setTitle(`Полегче!`)
               .setDescription(
                 `Прежде чем делать такие большие ставки, **заработай на них**!`
               )
               .setFooter(`У вас не хватает валюты.`)
           )
-          .then((m) => m.delete({ timeout: 10000 }));
+          .then((m) => m.delete({ timeout: 1e5 }));
       } else {
         const newMsg = await channel.send(
           new Discord.MessageEmbed()
@@ -54,28 +73,33 @@ export default class extends Command {
             .setFooter("Поторопись! У тебя есть всего 1 минута на ответ.")
         );
 
-        await newMsg.react("640827413865037844");
-        await newMsg.react("640827413659385878");
+        await newMsg.react(Constants.Bets.Emojis.Head);
+        await newMsg.react(Constants.Bets.Emojis.Tail);
 
         newMsg
           .awaitReactions(
             (r, u) =>
               u.id === member!.id &&
-              ["640827413865037844", "640827413659385878"].includes(
+              [Constants.Bets.Emojis.Head, Constants.Bets.Emojis.Tail].includes(
                 r.emoji.id || r.emoji.name
               ),
             {
               max: 1,
-              time: 1 * 1000 * 60,
+              time: 6e5,
               errors: ["time"],
             }
           )
           .then(async (collected) => {
             const reaction = collected.first();
-            collected
+            // if ([Constants.Bets.Emojis.Head, Constants.Bets.Emojis.Tail].some(id => reaction!.emoji.id === id)) {
+            //   let guess = reaction?.emoji.id == Constants.Bets.Emojis.Head ? Bets.BetFlipGuess.H : Bets.BetFlipGuess.T
+            //   const rnd = randomInt(0, 1000);
+            //   usersBets.find(x => x.id == member.id)
+            //   if ()
+            // }
             if (
               (reaction!.emoji.id || reaction!.emoji.name) ===
-              "640827413865037844"
+              Constants.Bets.Emojis.Head
             ) {
               let guess = Bets.BetFlipGuess["H"];
               const rnd = randomInt(0, 1000);
@@ -99,11 +123,7 @@ export default class extends Command {
               }
               const notify = new Discord.MessageEmbed();
               notify.setThumbnail(imageToSend);
-
-              let event = "Получение";
-              let reason = "Выигрыш в ставка (ставка)";
               let amount: number = 0;
-              let smth = 0;
 
               if (guess === result) {
                 amount = wholeNumber(
@@ -136,18 +156,15 @@ export default class extends Command {
                   .setFooter(
                     `Используйте команду - "!$", чтобы проверить свой баланс.`
                   );
-
-                event = `Конфискация`;
-                reason = `Проигрыш в ставка (ставка)`;
-                smth = 1;
               }
               return channel.send(notify)
             } else if (
               (reaction!.emoji.id || reaction!.emoji.name) ===
-              "640827413659385878"
+              Constants.Bets.Emojis.Tail
             ) {
               let guess = Bets.BetFlipGuess["T"];
               const rnd = randomInt(0, 1000);
+              console.log(rnd)
               if (rnd > 500) {
                 result =
                   guess === Bets.BetFlipGuess.Heads
@@ -159,11 +176,12 @@ export default class extends Command {
                     : betflip.images.head;
               } else {
                 if (rnd <= 500) {
-                  result = Bets.BetFlipGuess.Heads;
-                  imageToSend = betflip.images.head;
-                } else {
                   result = Bets.BetFlipGuess.Tails;
                   imageToSend = betflip.images.tail;
+
+                } else {
+                  result = Bets.BetFlipGuess.Heads;
+                  imageToSend = betflip.images.head;
                 }
               }
               const notify = new Discord.MessageEmbed();

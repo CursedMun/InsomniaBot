@@ -26,7 +26,6 @@ export default class extends Command {
     const Users = this.client.db.getCollection("users")!;
     const Configs = this.client.db.getCollection("configs")!;
     const clans = this.client.db.getCollection("clans")!;
-    const taxs = this.client.db.getCollection("clantaxs")!;
     const config = await Configs.getOne({ guildId: message.guild?.id });
     try {
       const role = mentions.roles.first() || guild!.roles.cache.get(args[0]);

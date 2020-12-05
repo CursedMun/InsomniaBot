@@ -1,4 +1,5 @@
 import { Core, PermissionLevels, Mongo, Discord, Json } from "discore.js";
+
 import { existsSync, readFileSync } from "fs";
 import Constants, { Colors } from "./util/Constants";
 import { CronJob } from "cron";
@@ -220,14 +221,14 @@ db.addModel("clans", {
     type: Mongo.Types.Number,
     default: 15,
   },
-});
-db.addModel("clantaxs", {
-  ClubId: Mongo.Types.String,
-  time: Mongo.Types.Number,
-  stage: {
-    type: Mongo.Types.Number,
-    default: 0,
-  },
+  taxs: {
+    type: Mongo.Types.Object,
+    default: {
+      time: helpers.unixTime() + 2505600,
+      stage: 0
+    }
+  }
+  ,
 });
 db.addModel("cookiesystem", {
   userID: Mongo.Types.String,

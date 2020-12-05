@@ -16,7 +16,8 @@ class MessageReactionAdd extends Event {
     if (member.bot) return;
     const discordemojis = await this.client.db
       .getCollection("discordemojis")
-      ?.findOne((de: Document) => de.channelid == reaction.message.channel.id && (de.emojiid == reaction.emoji.name || reaction.emoji.id || de.value == reaction.emoji.name || reaction.emoji.id));
+      ?.findOne((de: Document) => de.channelid == reaction.message.channel.id && de.emojiid == (reaction.emoji.id || reaction.emoji.name ));
+    console.log(discordemojis)
     const message = reaction.message;
     if (reaction.message.channel.id == Constants.Ids.Chs.ServerChats.CreationChat) {
       if (discordemojis && !discordemojis.price) {

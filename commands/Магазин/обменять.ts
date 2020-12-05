@@ -51,7 +51,7 @@ export default class extends Command {
         message.channel
           .send(
             new Discord.MessageEmbed()
-              .setColor("#2f3136")
+              .setColor(Constants.Colors.Transparent)
               .setAuthor(
                 member!.displayName,
                 member!.user.displayAvatarURL({ size: 2048, dynamic: true })
@@ -89,8 +89,10 @@ export default class extends Command {
                 return awardTransaction(member!, selected.cost, this.client);
 
               } else {
-                return message.reply("Done");
+                return message.reply("👍");
               }
+            }).catch(collected => {
+              return message.reply("👍");
             });
           });
       } else {

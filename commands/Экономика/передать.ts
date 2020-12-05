@@ -23,7 +23,7 @@ export default class extends Command {
     const Configs = this.client.db.getCollection("configs")!;
     const config = await Configs.getOne({
       guildId: Constants.Ids.guilds[0],
-    }); 
+    });
     const amount: number = wholeNumber(Number(args[1]));
     if (!Number.isInteger(amount) || amount < 10 || amount > 10000 || !amount) return;
 
@@ -54,15 +54,25 @@ export default class extends Command {
           member!.user.displayAvatarURL({ dynamic: true })
         )
         .setDescription(
-          `**Перевод средств!**\n\n${member} передает **${result}**${
-          config!.CurrencyLogo
+          `**Перевод средств!**\n\n${member} передает **${result}**${config!.CurrencyLogo
           } пользователю ${target}`
         );
 
       channel.send(notify);
+
       // Сообщение упомянотому пользователю в лс
 
-      return target.send(notify).catch(() => { });
+      const dm = new Discord.MessageEmbed()
+        .setColor(member!.displayColor)
+        .setAuthor(
+          member!.displayName,
+          member!.user.displayAvatarURL({ dynamic: true })
+        )
+        .setDescription(
+          `${member} передал тебе **${result}** ${config!.CurrencyLogo}`
+        );
+
+      return target.send(dm).catch(err => console.error(`Не смог отправить sms в лс ${message.member!.user.tag}`));
     });
   }
 }

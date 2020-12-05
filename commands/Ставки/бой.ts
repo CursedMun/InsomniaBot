@@ -162,15 +162,17 @@ export default class extends Command {
                 }
               });
               collector.on('end', reaction => {
-                m.delete()
-                awardTransaction(member!, amount, this.client);
-                awardTransaction(target!, amount, this.client);
-                const nope = new Discord.MessageEmbed()
-                  .setColor(member!.displayColor)
-                  .setDescription(
-                    `${member}, ваш вызов на поединок был проигнорирован`
-                  );
-                channel.send(nope);
+                if (!m.deleted) {
+                  m.delete()
+                  awardTransaction(member!, amount, this.client);
+                  awardTransaction(target!, amount, this.client);
+                  const nope = new Discord.MessageEmbed()
+                    .setColor(member!.displayColor)
+                    .setDescription(
+                      `${member}, ваш вызов на поединок был проигнорирован`
+                    );
+                  channel.send(nope);
+                }
               })
             });
           }
